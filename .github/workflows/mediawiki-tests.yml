@@ -166,7 +166,7 @@ jobs:
             fi
           fi
 
-      - name: Main Tests
+      - name: Setup for Tests
         continue-on-error: ${{ inputs.experimental }}
         run: |
           cd /home/runner
@@ -176,6 +176,10 @@ jobs:
           chmod 777 src cache cover
           sudo chown -R nobody:nogroup src cache
           sudo chown $(id -u):$(id -g) src cache
+          
+      - name: Composer install (docker)
+        continue-on-error: ${{ inputs.experimental }}
+        run: |
           # Composer install
           docker run \
             -e ZUUL_PROJECT=mediawiki/extensions/"${{ github.event.repository.name }}" \
@@ -187,6 +191,9 @@ jobs:
             --skip-install \
             --skip all \
             $DEPENDENCIES
+      - name: Run phan tests
+        continue-on-error: ${{ inputs.experimental }}
+        run: |
           # phan
           docker run \
             -e THING_SUBNAME=extensions/"${{ github.event.repository.name }}" \
@@ -195,6 +202,9 @@ jobs:
             --color
           # See https://doc.wikimedia.org/quibble/index.html#remove-localsettings-php-between-runs
           rm "$(pwd)"/src/LocalSettings.php || true
+      - name: Run phpunit tests
+        continue-on-error: ${{ inputs.experimental }}
+        run: |
           # phpunit
           docker run \
             --entrypoint quibble-with-supervisord \
@@ -208,6 +218,9 @@ jobs:
             $DEPENDENCIES
           # See https://doc.wikimedia.org/quibble/index.html#remove-localsettings-php-between-runs
           rm "$(pwd)"/src/LocalSettings.php || true
+      - name: Run selenium tests
+        continue-on-error: ${{ inputs.experimental }}
+        run: |
           # selenium
           docker run \
             --entrypoint quibble-with-supervisord \
@@ -221,6 +234,9 @@ jobs:
             $DEPENDENCIES
           # See https://doc.wikimedia.org/quibble/index.html#remove-localsettings-php-between-runs
           rm "$(pwd)"/src/LocalSettings.php || true
+      - name: Run qunit tests
+        continue-on-error: ${{ inputs.experimental }}
+        run: |
           # qunit
           docker run \
             --entrypoint quibble-with-supervisord \
@@ -234,6 +250,9 @@ jobs:
             $DEPENDENCIES
           # See https://doc.wikimedia.org/quibble/index.html#remove-localsettings-php-between-runs
           rm "$(pwd)"/src/LocalSettings.php || true
+      - name: Run npm-test
+        continue-on-error: ${{ inputs.experimental }}
+        run: |
           # npm-test
           docker run \
             --entrypoint quibble-with-supervisord \
@@ -247,6 +266,9 @@ jobs:
             $DEPENDENCIES
           # See https://doc.wikimedia.org/quibble/index.html#remove-localsettings-php-between-runs
           rm "$(pwd)"/src/LocalSettings.php || true
+      - name: Run composer-test
+        continue-on-error: ${{ inputs.experimental }}
+        run: |
           # composer-test
           docker run \
             --entrypoint quibble-with-supervisord \
