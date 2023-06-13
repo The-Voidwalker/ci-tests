@@ -180,6 +180,7 @@ jobs:
       - name: Composer install (docker)
         continue-on-error: ${{ inputs.experimental }}
         run: |
+          cd /home/runner
           # Composer install
           docker run \
             -e ZUUL_PROJECT=mediawiki/extensions/"${{ github.event.repository.name }}" \
@@ -194,6 +195,7 @@ jobs:
       - name: Run phan tests
         continue-on-error: ${{ inputs.experimental }}
         run: |
+          cd /home/runner
           # phan
           docker run \
             -e THING_SUBNAME=extensions/"${{ github.event.repository.name }}" \
@@ -205,6 +207,7 @@ jobs:
       - name: Run phpunit tests
         continue-on-error: ${{ inputs.experimental }}
         run: |
+          cd /home/runner
           # phpunit
           docker run \
             --entrypoint quibble-with-supervisord \
@@ -221,6 +224,7 @@ jobs:
       - name: Run selenium tests
         continue-on-error: ${{ inputs.experimental }}
         run: |
+          cd /home/runner
           # selenium
           docker run \
             --entrypoint quibble-with-supervisord \
@@ -237,6 +241,7 @@ jobs:
       - name: Run qunit tests
         continue-on-error: ${{ inputs.experimental }}
         run: |
+          cd /home/runner
           # qunit
           docker run \
             --entrypoint quibble-with-supervisord \
@@ -253,6 +258,7 @@ jobs:
       - name: Run npm-test
         continue-on-error: ${{ inputs.experimental }}
         run: |
+          cd /home/runner
           # npm-test
           docker run \
             --entrypoint quibble-with-supervisord \
@@ -269,6 +275,7 @@ jobs:
       - name: Run composer-test
         continue-on-error: ${{ inputs.experimental }}
         run: |
+          cd /home/runner
           # composer-test
           docker run \
             --entrypoint quibble-with-supervisord \
